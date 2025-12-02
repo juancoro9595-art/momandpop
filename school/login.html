@@ -6,20 +6,76 @@
 </head>
 
 <body class="login-page">
-
   <div class="login-container">
     <h1>Login</h1>
 
-    <!-- Juan: use these IDs when you hook up real logic -->
+    <!-- Username field -->
     <label for="username">Username</label>
     <input type="text" id="username">
 
+    <!-- Password field -->
     <label for="password">Password</label>
     <input type="password" id="password">
 
-    <button onclick="location.href='menu.html'">Login</button>
-    <button onclick="location.href='menu.html'">Continue As Guest</button>
+    <!-- Buttons -->
+    <button onclick="createAccount()">Create Account</button>
+    <button onclick="login()">Login</button>
+    <button onclick="guest()">Continue As Guest</button>
+
+    <!-- Message area -->
+    <div id="message"></div>
   </div>
 
+  <script>
+    // Save account in localStorage
+    function createAccount() {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+
+      if (user === "" || pass === "") {
+        showMessage("Username and password cannot be empty!", "red");
+      } else {
+        localStorage.setItem("savedUsername", user);
+        localStorage.setItem("savedPassword", pass);
+        showMessage("Account created successfully!", "green");
+      }
+    }
+
+    // Validate login
+    function login() {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+
+      const savedUser = localStorage.getItem("savedUsername");
+      const savedPass = localStorage.getItem("savedPassword");
+
+      if (!savedUser || !savedPass) {
+        showMessage("No account exists. Please create one first!", "red");
+      } else if (user !== savedUser) {
+        showMessage("Wrong username!", "red");
+      } else if (pass !== savedPass) {
+        showMessage("Wrong password!", "red");
+      } else {
+        showMessage("Login successful! Welcome " + savedUser, "green");
+        window.location.href = "menu.html";
+      }
+    }
+
+    // Guest login
+    function guest() {
+      showMessage("Continuing as Guest...", "blue");
+      window.location.href = "menu.html";
+    }
+
+    // Show messages nice
+    function showMessage(msg, color) {
+      const messageDiv = document.getElementById('message');
+      messageDiv.textContent = msg;
+      messageDiv.style.color = color;
+      messageDiv.style.marginTop = "10px";
+      messageDiv.style.fontWeight = "bold";
+      messageDiv.style.textAlign = "center";
+    }
+  </script>
 </body>
 </html>
